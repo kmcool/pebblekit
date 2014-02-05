@@ -372,6 +372,10 @@ class Pebble(object):
                         self._ws_client.handle_response(endpoint, resp)
                     elif endpoint == 'log':
                         log.info(resp)
+                    elif endpoint == 'watchConnectionStatusUpdate':
+                        watch_connected = resp
+                        if watch_connected and self._app_log_enabled:
+                            self.app_log_enable()
                     continue
 
                 #log.info("message for endpoint " + str(endpoint) + " resp : " + str(resp))
@@ -560,11 +564,11 @@ class Pebble(object):
         self._send_message("TIME", data)
 
 
-    def install_app_ws(self, pbw_path):
+    def install_bundle_ws(self, bundle_path):
         self._ws_client = WSClient()
-        f = open(pbw_path, 'r')
+        f = open(bundle_path, 'r')
         data = f.read()
-        self._ser.write(data, ws_cmd=WebSocketPebble.WS_CMD_APP_INSTALL)
+        self._ser.write(data, ws_cmd=WebSocketPebble.WS_CMD_BUNDLE_INSTALL)
         self._ws_client.listen()
         while not self._ws_client._received and not self._ws_client._error:
             pass
@@ -574,7 +578,7 @@ class Pebble(object):
             return True
         log.debug("WS Operation failed with response %s" % 
                                         self._ws_client._response)
-        log.error("Failed to install %s" % repr(pbw_path))
+        log.error("Failed to install %s" % repr(bundle_path))
         return False
 
 
@@ -648,7 +652,7 @@ class Pebble(object):
         """Install an app bundle (*.pbw) to the target Pebble."""
 
         if self._connection_type == 'websocket':
-            self.install_app_ws(pbw_path)
+            self.install_bundle_ws(pbw_path)
         else:
             self.install_app_pebble_protocol(pbw_path, launch_on_install)
 
@@ -859,10 +863,12 @@ class Pebble(object):
             time.sleep(1)
 
     def app_log_enable(self):
+        self._app_log_enabled = True
         log.info("Enabling application logging...")
         self._send_message("APP_LOGS", pack("!B", 0x01))
 
     def app_log_disable(self):
+        self._app_log_enabled = False
         log.info("Disabling application logging...")
         self._send_message("APP_LOGS", pack("!B", 0x00))
 
@@ -894,6 +900,8 @@ class Pebble(object):
     def _system_message_response(self, endpoint, data):
         if len(data) == 2:
             log.info("Got system message %s" % repr(unpack('!bb', data)))
+        elif len(data) == 3:
+            log.info("Got system message %s" % repr(unpack('!bbb', data)))
         else:
             log.info("Got 'unknown' system message...")
 
@@ -1239,7 +1247,6 @@ class WSClient(object):
       self._topic = topic
       self._response = response;
       self._received = True
-
 
 class PutBytesClient(object):
     states = {

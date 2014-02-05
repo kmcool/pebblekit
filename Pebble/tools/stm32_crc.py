@@ -43,7 +43,7 @@ if __name__ == '__main__':
     assert(0x495e02ca == process_buffer("\xfe\xff\xfe\xff\x88"))
 
     print "All tests passed!"
-    
+
     if len(sys.argv) >= 2:
         b = open(sys.argv[1]).read()
         crc = crc32(b)

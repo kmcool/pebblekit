@@ -162,7 +162,9 @@ class PblWafCommand(PblCommand):
             dirToSearch = os.path.join("build", "resources", dirName)
             found = False
             for name in os.listdir(dirToSearch):
-                if name.startswith(fileName):
+                if (type == "raw" and name == fileName) \
+                    or (type != 'raw' and name.startswith(fileName) 
+                        and name != fileName):
                     size = os.path.getsize(os.path.join(dirToSearch, name))
                     found = True
                     break
@@ -185,7 +187,8 @@ class PblWafCommand(PblCommand):
         os.environ['PATH'] = "{}:{}".format(os.path.join(self.sdk_path(args), 
                                 "arm-cs-tools", "bin"), os.environ['PATH'])
         
-        cmdLine = self.waf_path(args) + " " + self.waf_cmds
+        cmdLine = '"%s" %s' % (self.waf_path(args), self.waf_cmds)
+        
         retval = subprocess.call(cmdLine, shell=True)
         
         # If an error occurred, we need to do some sleuthing to determine a
@@ -198,7 +201,7 @@ class PblWafCommand(PblCommand):
         #  so we can determine the cause
           
         if (retval):
-            cmdArgs = cmdLine.split()
+            cmdArgs = [self.waf_path(args)] + self.waf_cmds.split()
             try:
                 cmdObj = create_sh_cmd_obj(cmdArgs[0])
                 output = cmdObj(*cmdArgs[1:])

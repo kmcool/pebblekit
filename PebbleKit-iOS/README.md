@@ -11,7 +11,14 @@ Welcome to Pebble's official iOS SDK!
 
 All Pebble SDK examples are now grouped in Pebble SDK, please look into the `examples/` folder of your Pebble SDK for sample code.
 
-## Integrating PebbleKit
+## Integrating PebbleKit using Cocoapods
+
+- Install [Cocoapods](http://www.cocoapods.org) or make sure it is up to date
+- Add a Podfile to your project if you don't have one already (Hint: use `pod init`).
+- Add this line to the Podfile: `pod 'PebbleKit', :path => "/path/to/PebbleKit-iOS"`
+- Run `pod install`
+
+## Integrating PebbleKit Manually
 
 - Drag PebbleKit.framework into project
 - Drag in PebbleVendor.framework into the project, or, drag the PebbleVendor.xcodeproj into project if you need to control the 3rd party components needed for PebbleKit.

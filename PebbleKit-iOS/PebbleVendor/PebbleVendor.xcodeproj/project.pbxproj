@@ -457,6 +457,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/OCMock\"",
 				);
+				OTHER_CFLAGS = "-Wno-all";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -473,6 +474,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/OCMock\"",
 				);
+				OTHER_CFLAGS = "-Wno-all";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

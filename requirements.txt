@@ -1,4 +1,5 @@
 Pillow==2.0.0
+Pillow>=2.2.1
 autobahn==0.5.14
 freetype-py==1.0
 pyserial>=2.6

@@ -384,7 +384,6 @@ BatteryChargeState battery_state_service_peek(void);
 //! Examples/watchapps/feature_accel_discs
 //! @{
 
-//! A single accelerometer sample for all three axes
 typedef struct __attribute__((__packed__)) {
   //! acceleration along the x axis
   int16_t x;
@@ -392,17 +391,29 @@ typedef struct __attribute__((__packed__)) {
   int16_t y;
   //! acceleration along the z axis
   int16_t z;
+
+  //! true if the watch vibrated when this sample was collected
+  bool did_vibrate;
+
+  //! Timestamp, in milliseconds
+  uint64_t timestamp;
 } AccelData;
 
 typedef enum {
+  //! Accelerometer's X axis. The positive direction along the X axis goes
+  //! toward the right of the watch.
   ACCEL_AXIS_X = 0,
+  //! Accelerometer's Y axis. The positive direction along the Y axis goes
+  //! toward the top of the watch.
   ACCEL_AXIS_Y = 1,
+  //! Accelerometer's Z axis. The positive direction along the Z axis goes
+  //! vertically out of the watchface.
   ACCEL_AXIS_Z = 2,
 } AccelAxisType;
 
 //! Callback type for accelerometer data events
-//! @param data a pointer to data
-//! @param num_samples the number of available samples
+//! @param data Pointer to the collected accelerometer samples.
+//! @param num_samples the number of samples stored in data.
 typedef void (*AccelDataHandler)(AccelData *data, uint32_t num_samples);
 
 //! Callback type for accelerometer tap events
@@ -467,9 +478,6 @@ void accel_tap_service_unsubscribe(void);
 //! @param tick_time the time at which the tick event was triggered
 //! @param units_changed which unit change triggered this tick event
 typedef void (*TickHandler)(struct tm *tick_time, TimeUnits units_changed);
-
-
-void tick_timer_service_init(void);
 
 //! Subscribe to the tick timer event service. Once subscribed, the handler gets called
 //! on every requested unit change
@@ -2420,30 +2428,16 @@ typedef struct TextLayout TextLayout;
 //! Pointer to opaque text layout cache data structure
 typedef TextLayout* GTextLayoutCacheRef;
 
-//! Draw text into the current graphics context, using the context's current text color.
-//! The text will be drawn inside a box with the specified dimensions and
-//! configuration, with clipping occuring automatically.
-//! @param ctx The destination graphics context in which to draw
-//! @param text The zero terminated UTF-8 string to draw
-//! @param font The font in which the text should be set
-//! @param box The bounding box in which to draw the text. The first line of text will be drawn against the top of the box.
-//! @param overflow_mode The overflow behavior, in case the text is larger than what fits inside the box.
-//! @param alignment The horizontal alignment of the text
-//! @param layout Optional layout cache data. Supply `NULL` to ignore the layout caching mechanism.
 void graphics_draw_text(GContext* ctx, const char* text, GFont const font, const GRect box, const GTextOverflowMode overflow_mode, const GTextAlignment alignment, const GTextLayoutCacheRef layout);
 
 //! Obtain the maximum size that a text with given font, overflow mode and alignment occupies within a given rectangular constraint.
-//! @param ctx the current graphics context
 //! @param text The zero terminated UTF-8 string for which to calculate the size
 //! @param font The font in which the text should be set while calculating the size
 //! @param box The bounding box in which the text should be constrained
 //! @param overflow_mode The overflow behavior, in case the text is larger than what fits inside the box.
 //! @param alignment The horizontal alignment of the text
-//! @param layout Optional layout cache data. Supply `NULL` to ignore the layout caching mechanism.
 //! @return The maximum size occupied by the text
-//! @note Because of an implementation detail, it is necessary to pass in the current graphics context,
-//! even though this function does not draw anything.
-GSize graphics_text_layout_get_max_used_size(GContext* ctx, const char* text, GFont const font, const GRect box, const GTextOverflowMode overflow_mode, const GTextAlignment alignment, GTextLayoutCacheRef layout);
+GSize graphics_text_layout_get_content_size(const char* text, GFont const font, const GRect box, const GTextOverflowMode overflow_mode, const GTextAlignment alignment);
 
 //! @} // group TextDrawing
 
@@ -2885,6 +2879,7 @@ void window_single_click_subscribe(ButtonId button_id, ClickHandler handler);
 //! Subscribe to single click event, with a repeat interval. A single click is detected every time "repeat_interval_ms" has been reached.
 //! @note Must be called from within the \ref ClickConfigProvider.
 //! @note \ref window_single_click_subscribe() and \ref window_single_repeating_click_subscribe() conflict, and cannot both be used on the same button.
+//! @note The back button cannot be overridden with a repeating click.
 //! @param repeat_interval_ms When holding down, how many milliseconds before the handler is fired again.
 //! @note If there is a long-click handler subscribed on this button, `repeat_interval_ms` will not be used.
 //! @see window_single_click_subscribe
@@ -2902,6 +2897,7 @@ void window_multi_click_subscribe(ButtonId button_id, uint8_t min_clicks, uint8_
 
 //! Subscribe to long click events.
 //! @note Must be called from within the \ref ClickConfigProvider.
+//! @note The back button cannot be overridden with a long click.
 //! @param button_id The button events to subscribe to. @see ButtonId.
 //! @param delay_ms Milliseconds after which "handler" is fired. A value of 0 means to use the system default 500ms.
 //! @param down_handler The \ref ClickHandler to fire as soon as the button has been held for `delay_ms`. This may be NULL to have no down handler.
@@ -2910,6 +2906,7 @@ void window_long_click_subscribe(ButtonId button_id, uint16_t delay_ms, ClickHan
 
 //! Subscribe to raw click events.
 //! @note Must be called from within the \ref ClickConfigProvider.
+//! @note The back button cannot be overridden with a raw click.
 //! @param button_id The button events to subscribe to. @see ButtonId.
 //! @param down_handler The \ref ClickHandler to fire as soon as the button has been pressed. This may be NULL to have no down handler.
 //! @param up_handler The \ref ClickHandler to fire on the release of the button. This may be NULL to have no up handler.
@@ -4234,6 +4231,10 @@ int simple_menu_layer_get_selected_index(const SimpleMenuLayer *simple_menu);
 //! @param animated Supply `true` to animate changing the selection, or `false`
 //! to change the selection instantly.
 void simple_menu_layer_set_selected_index(SimpleMenuLayer *simple_menu, int32_t index, bool animated);
+
+//! @param simple_menu The \ref SimpleMenuLayer to get the \ref MenuLayer from.
+//! @return The \ref MenuLayer.
+MenuLayer *simple_menu_layer_get_menu_layer(SimpleMenuLayer *simple_menu);
 
 //! @} // group SimpleMenuLayer
 

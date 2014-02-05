@@ -808,11 +808,13 @@ class Pebble(object):
         if not async:
             return EndpointSync(self, "PING").get_data()
 
-    def reset(self):
+    def reset(self, prf = False):
 
         """Reset the watch remotely."""
-
-        self._send_message("RESET", "\x00")
+        if prf is True:
+            self._send_message("RESET", "\xFF")
+        else:
+            self._send_message("RESET", "\x00")
 
     def dump_logs(self, generation_number):
         """Dump the saved logs from the watch.
@@ -907,8 +909,8 @@ class Pebble(object):
 
     def _parse_log_response(self, log_message_data):
         timestamp, level, msgsize, linenumber = unpack("!IBBH", log_message_data[:8])
-        filename = log_message_data[8:24].decode('utf-8')
-        message = log_message_data[24:24+msgsize].decode('utf-8')
+        filename = log_message_data[8:24].decode('utf-8', 'ignore')
+        message = log_message_data[24:24+msgsize].decode('utf-8', 'ignore')
 
         str_level = self.log_levels[level] if level in self.log_levels else "?"
 
@@ -1139,8 +1141,15 @@ class Pebble(object):
         # Then phone capabilities, android app adds TELEPHONY and SMS,
         # and the phone type (we know android works for now)
         remote = remote_cap["TELEPHONY"] | remote_cap["SMS"] | os["ANDROID"]
+        
+        # Version 2 of the phone version response. 
+        response_vers = 2
+        major = 2
+        minor = 0
+        bugfix = 0
 
-        msg = pack("!biII", 1, -1, session, remote)
+        msg = pack("!biIIbbbb", 1, -1, session, remote, response_vers,
+                   major, minor, bugfix)
         self._send_message("PHONE_VERSION", msg);
 
     def _music_control_response(self, endpoint, data):

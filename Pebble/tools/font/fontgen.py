@@ -66,7 +66,7 @@ class Font:
     def set_regex_filter(self, regex_string):
         if regex_string != ".*":
             try:
-                self.regex = re.compile(regex_string)
+                self.regex = re.compile(unicode(regex_string, 'utf8'))
             except Exception, e:
                 raise Exception("Supplied filter argument was not a valid regular expression.")
         else:

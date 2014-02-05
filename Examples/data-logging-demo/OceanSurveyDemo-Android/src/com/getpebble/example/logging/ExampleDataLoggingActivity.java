@@ -89,8 +89,8 @@ public class ExampleDataLoggingActivity extends Activity {
 
     private static enum AnimalName {
         SEALION(0x5),
-        DOLPHIN(0xb),
-        PELICAN(0xd),
+        DOLPHIN(0xd),
+        PELICAN(0xb),
         UNKNOWN(0xff);
 
         public final int id;

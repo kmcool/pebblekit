@@ -259,6 +259,14 @@ public final class Constants {
     public static final int GOLF_CMD_NEXT = 0x02;
 
 
+    public static final int KIT_STATE_COLUMN_CONNECTED = 0;
+    public static final int KIT_STATE_COLUMN_APPMSG_SUPPORT = 1;
+    public static final int KIT_STATE_COLUMN_DATALOGGING_SUPPORT = 2;
+    public static final int KIT_STATE_COLUMN_VERSION_MAJOR = 3;
+    public static final int KIT_STATE_COLUMN_VERSION_MINOR = 4;
+    public static final int KIT_STATE_COLUMN_VERSION_POINT = 5;
+    public static final int KIT_STATE_COLUMN_VERSION_TAG = 6;
+    
     /**
      * Instantiates a new constants.
      */

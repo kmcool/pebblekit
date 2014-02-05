@@ -26,29 +26,6 @@ typedef enum {
 - (void)appMessagesGetIsSupported:(void(^)(PBWatch *watch, BOOL isAppMessagesSupported))fetchedBlock;
 
 /**
- *  Configures the UUID of the application. The UUID is used as the identifier of the watch/phone app pair and is used
- *  to make sure that the message that an app sends, arrives at its companion app on the other device (and not in another app).
- *  @param uuid The 16 byte UUID of your app.
- *  @note When -appMessagesSetUUID: is called, the UUID will be used for all incoming and outgoing messages thereafter.
- *  The UUID needs to be set before doing any other AppMessage operations (with one exeception, -appMessagesGetIsSupported: ).
- */
-- (void)appMessagesSetUUID:(NSData*)uuid;
-
-/**
- *  Returns the current UUID of the application as set earlier using -appMessagesSetUUID:
- *  @return The UUID of your app
- *  @see -appMessagesSetUUID:
- */
-- (NSData*)appMessagesUUID;
-
-/**
- *  Verifies the currently set application UUID.
- *  @return YES if the currently set UUID is valid, NO if it is not.
- *  @see -appMessagesSetUUID:
- */
-- (BOOL)appMessagesHasValidAppUUID;
-
-/**
  *  Pushes an update to the accompanying watch application.
  *  @param dictionary Contains the key/value pairs to update. The dictionary can only contain items with an NSNumber
  *  key and only contain NSString, NSNumber or NSData values. Use the methods in the NSNumber (stdint) category to

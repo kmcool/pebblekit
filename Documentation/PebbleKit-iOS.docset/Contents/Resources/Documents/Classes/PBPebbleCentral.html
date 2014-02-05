@@ -39,6 +39,8 @@
 	
 	<option value="properties">Properties</option>
 	
+	<option value="//api/name/appUUID">&nbsp;&nbsp;&nbsp;&nbsp;appUUID</option>
+	
 	<option value="//api/name/connectedWatches">&nbsp;&nbsp;&nbsp;&nbsp;connectedWatches</option>
 	
 	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
@@ -58,6 +60,8 @@
 	
 	
 	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/hasValidAppUUID">&nbsp;&nbsp;&nbsp;&nbsp;- hasValidAppUUID</option>
 	
 	<option value="//api/name/installMobileApp">&nbsp;&nbsp;&nbsp;&nbsp;- installMobileApp</option>
 	
@@ -91,6 +95,8 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appUUID">appUUID</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectedWatches">connectedWatches</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
@@ -112,6 +118,8 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasValidAppUUID">hasValidAppUUID</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/installMobileApp">installMobileApp</a></span></li>
 	
@@ -206,6 +214,18 @@
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/appUUID">&nbsp;&nbsp;appUUID</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/hasValidAppUUID">&ndash;&nbsp;hasValidAppUUID</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/isMobileAppInstalled">&ndash;&nbsp;isMobileAppInstalled</a></code>
 	</span>
 	
@@ -240,6 +260,61 @@
 					<div class="section section-methods">
 						<a title="Properties" name="properties"></a>
 						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/appUUID" title="appUUID"></a>
+	<h3 class="subsubtitle method-title">appUUID</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The UUID is used as the identifier of the watch/phone app pair and is used
+to make sure that appMessage and dataLogging communications arrives at its companion app
+on the other device (and not in another app).</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readwrite) NSData *appUUID</code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>uuid</em></dt>
+			<dd><p>The 16 byte UUID of your app.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The UUID is used as the identifier of the watch/phone app pair and is used
+to make sure that appMessage and dataLogging communications arrives at its companion app
+on the other device (and not in another app).</p><div class="note"><p><strong>Note:</strong> The UUID needs to be set before using either app message or data logging.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">PBPebbleCentral.h</code><br />
+	</div>				
+	
+	
+</div>
 						
 						<div class="section-method">
 	<a name="//api/name/connectedWatches" title="connectedWatches"></a>
@@ -465,6 +540,52 @@ console. It is advised to call this before making any other calls to PebbleKit.<
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
+	<a name="//api/name/hasValidAppUUID" title="hasValidAppUUID"></a>
+	<h3 class="subsubtitle method-title">hasValidAppUUID</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Verifies the currently set application UUID.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)hasValidAppUUID</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>YES if the currently set UUID is valid, NO if it is not.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Verifies the currently set application UUID.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">PBPebbleCentral.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/installMobileApp" title="installMobileApp"></a>
 	<h3 class="subsubtitle method-title">installMobileApp</h3>
 	
@@ -643,7 +764,7 @@ console. It is advised to call this before making any other calls to PebbleKit.<
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Pebble Technology Corp.. All rights reserved. (Last updated: 2013-11-07)</span><br />
+						<p><span class="copyright">&copy; 2013 Pebble Technology Corp.. All rights reserved. (Last updated: 2013-11-14)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

@@ -20,24 +20,55 @@
 
 //! Status codes
 typedef enum StatusCode {
-  S_SUCCESS = 0,              //!< Operation completed successfully.
-  E_ERROR = -1,               //!< An error occurred (no description).
-  E_UNKNOWN = -2,             //!< No idea what went wrong.
-  E_INTERNAL = -3,            //!< There was a generic internal logic error.
-  E_INVALID_ARGUMENT = -4,    //!< The function was not called correctly.
-  E_OUT_OF_MEMORY = -5,       //!< Insufficient allocatable memory available.
-  E_OUT_OF_STORAGE = -6,      //!< Insufficient long-term storage available.
-  E_OUT_OF_RESOURCES = -7,    //!< Insufficient resources available.
-  E_RANGE = -8,               //!< Argument out of range (may be dynamic).
-  E_DOES_NOT_EXIST = -9,      //!< Target of operation does not exist.
-  E_INVALID_OPERATION = -10,  //!< Operation not allowed (may depend on state).
-  E_BUSY = -11,               //!< Another operation prevented this one.
+  //! Operation completed successfully.
+  S_SUCCESS = 0,
 
-  S_TRUE = 1,                 //!< Equivalent of boolean true.
-  S_FALSE = 0,                //!< Equivalent of boolean false.
+  //! An error occurred (no description).
+  E_ERROR = -1,
 
-  S_NO_MORE_ITEMS = 2,        //!< For list-style requests.  At end of list.
-  S_NO_ACTION_REQUIRED = 3,   //!< No action was taken as none was required.
+  //! No idea what went wrong.
+  E_UNKNOWN = -2,
+
+  //! There was a generic internal logic error.
+  E_INTERNAL = -3,
+
+  //! The function was not called correctly.
+  E_INVALID_ARGUMENT = -4,
+
+  //! Insufficient allocatable memory available.
+  E_OUT_OF_MEMORY = -5,
+
+  //! Insufficient long-term storage available.
+  E_OUT_OF_STORAGE = -6,
+
+  //! Insufficient resources available.
+  E_OUT_OF_RESOURCES = -7,
+
+  //! Argument out of range (may be dynamic).
+  E_RANGE = -8,
+
+  //! Target of operation does not exist.
+  E_DOES_NOT_EXIST = -9,
+
+  //! Operation not allowed (may depend on state).
+  E_INVALID_OPERATION = -10,
+
+  //! Another operation prevented this one.
+  E_BUSY = -11,
+
+
+  //! Equivalent of boolean true.
+  S_TRUE = 1,
+
+  //! Equivalent of boolean false.
+  S_FALSE = 0,
+
+  //! For list-style requests.  At end of list.
+  S_NO_MORE_ITEMS = 2,
+
+  //! No action was taken as none was required.
+  S_NO_ACTION_REQUIRED = 3,
+
 } StatusCode;
 
 typedef int32_t status_t;
@@ -397,7 +428,6 @@ typedef void (*AccelTapHandler)(AccelAxisType axis, int32_t direction);
 
 //! Valid accelerometer sampling rates, in Hz
 typedef enum {
-  ACCEL_SAMPLING_1HZ = 1,
   ACCEL_SAMPLING_10HZ = 10,
   ACCEL_SAMPLING_25HZ = 25,
   ACCEL_SAMPLING_50HZ = 50,
@@ -929,22 +959,30 @@ typedef void (*DictionarySerializeCallback)(const uint8_t * const data, const ui
 //! that `context` points to, can be stack allocated.
 //! @param callback The callback that will be called with the serialized data of the generated dictionary.
 //! @param context Pointer to any application specific data that gets passed into the callback.
-//! @param tuplets_count The number of tuplets that follow.
 //! @param tuplets An array of Tuplets that need to be serialized into the dictionary.
+//! @param tuplets_count The number of tuplets that follow.
 //! @return \ref DICT_OK, \ref DICT_NOT_ENOUGH_STORAGE or \ref DICT_INVALID_ARGS
-DictionaryResult dict_serialize_tuplets(DictionarySerializeCallback callback, void *context, const uint8_t tuplets_count, const Tuplet * const tuplets);
+DictionaryResult dict_serialize_tuplets(DictionarySerializeCallback callback, void *context, const Tuplet * const tuplets, const uint8_t tuplets_count);
 
 //! Utility function that takes an array of Tuplets and serializes them into
 //! a dictionary with a given buffer and size.
-//! @param tuplets_count The number of tuplets in the array
 //! @param tuplets The array of tuplets
+//! @param tuplets_count The number of tuplets in the array
 //! @param buffer The buffer in which to write the serialized dictionary
 //! @param [in] size_in_out The available buffer size in bytes
 //! @param [out] size_in_out The number of bytes written
 //! @return \ref DICT_OK, \ref DICT_NOT_ENOUGH_STORAGE or \ref DICT_INVALID_ARGS
-DictionaryResult dict_serialize_tuplets_to_buffer(const uint8_t tuplets_count, const Tuplet * const tuplets, uint8_t *buffer, uint32_t *size_in_out);
+DictionaryResult dict_serialize_tuplets_to_buffer(const Tuplet * const tuplets, const uint8_t tuplets_count, uint8_t *buffer, uint32_t *size_in_out);
 
-DictionaryResult dict_serialize_tuplets_to_buffer_with_iter(const uint8_t tuplets_count, const Tuplet * const tuplets, DictionaryIterator *iter, uint8_t *buffer, uint32_t *size_in_out);
+//! Serializes an array of Tuplets into a dictionary with a given buffer and size.
+//! @param iter The dictionary iterator
+//! @param tuplets The array of tuplets
+//! @param tuplets_count The number of tuplets in the array
+//! @param buffer The buffer in which to write the serialized dictionary
+//! @param [in] size_in_out The available buffer size in bytes
+//! @param [out] size_in_out The number of bytes written
+//! @return \ref DICT_OK, \ref DICT_NOT_ENOUGH_STORAGE or \ref DICT_INVALID_ARGS
+DictionaryResult dict_serialize_tuplets_to_buffer_with_iter(DictionaryIterator *iter, const Tuplet * const tuplets, const uint8_t tuplets_count, uint8_t *buffer, uint32_t *size_in_out);
 
 //! Serializes a Tuplet and writes the resulting Tuple into a dictionary.
 //! @param iter The dictionary iterator
@@ -955,11 +993,11 @@ DictionaryResult dict_write_tuplet(DictionaryIterator *iter, const Tuplet * cons
 //! Calculates the number of bytes that a dictionary will occupy, given
 //! one or more Tuplets that need to be stored in the dictionary.
 //! @note See \ref dict_calc_buffer_size() for the formula for the calculation.
-//! @param tuplets_count The total number of Tuplets that follow.
 //! @param tuplets An array of Tuplets that need to be stored in the dictionary.
+//! @param tuplets_count The total number of Tuplets that follow.
 //! @return The total number of bytes of storage needed.
 //! @see Tuplet
-uint32_t dict_calc_buffer_size_from_tuplets(const uint8_t tuplets_count, const Tuplet * const tuplets);
+uint32_t dict_calc_buffer_size_from_tuplets(const Tuplet * const tuplets, const uint8_t tuplets_count);
 
 //! Type of the callback used in \ref dict_merge()
 //! @param key The key that is being updated.
@@ -1227,14 +1265,14 @@ AppMessageResult app_message_outbox_send(void);
 //! \sa app_message_inbox_size_maximum()
 //! \sa APP_MESSAGE_OUTBOX_SIZE_MINIMUM
 //!
-#define APP_MESSAGE_INBOX_SIZE_MINIMUM 64
+#define APP_MESSAGE_INBOX_SIZE_MINIMUM 124
 
 //! As long as the firmware maintains its current major version, outboxes of this size or smaller will be allowed.
 //!
 //! \sa app_message_outbox_size_maximum()
 //! \sa APP_MESSAGE_INBOX_SIZE_MINIMUM
 //!
-#define APP_MESSAGE_OUTBOX_SIZE_MINIMUM 64
+#define APP_MESSAGE_OUTBOX_SIZE_MINIMUM 636
 
 //! @} // group AppMessage
 
@@ -1484,6 +1522,8 @@ void psleep(int millis);
 struct AppTimer;
 typedef struct AppTimer AppTimer;
 
+//! The type of function which can be called when a timer fires.  The argument will be the @p callback_data passed to
+//! @ref app_timer_register().
 typedef void (*AppTimerCallback)(void* data);
 
 //! Registers a timer that ends up in callback being called some specified time in the future.
@@ -1539,21 +1579,21 @@ int32_t persist_read_int(const uint32_t key);
 //! Reads a blob of data for a given key from persistent storage into a given buffer.
 //! If the value has not yet been set, the given buffer is left unchanged.
 //! @param key The key of the field to read from.
-//! @param buffer_size The maximum size of the given buffer.
 //! @param buffer The pointer to a buffer to be written to.
+//! @param buffer_size The maximum size of the given buffer.
 //! @return The number of bytes written into the buffer or \ref E_DOES_NOT_EXIST
 //! if there is no field matching the given key.
-int persist_read_data(const uint32_t key, const size_t buffer_size, void *buffer);
+int persist_read_data(const uint32_t key, void *buffer, const size_t buffer_size);
 
 //! Reads a string for a given key from persistent storage into a given buffer.
 //! The string will be null terminated.
 //! If the value has not yet been set, the given buffer is left unchanged.
 //! @param key The key of the field to read from.
-//! @param buffer_size The maximum size of the given buffer. This includes the null character.
 //! @param buffer The pointer to a buffer to be written to.
+//! @param buffer_size The maximum size of the given buffer. This includes the null character.
 //! @return The number of bytes written into the buffer or \ref E_DOES_NOT_EXIST
 //! if there is no field matching the given key.
-int persist_read_string(const uint32_t key, const size_t buffer_size, char *buffer);
+int persist_read_string(const uint32_t key, char *buffer, const size_t buffer_size);
 
 //! Writes a bool value flag for a given key into persistent storage.
 //! @param key The key of the field to write to.
@@ -1569,10 +1609,10 @@ status_t persist_write_int(const uint32_t key, const int32_t value);
 //! Writes a blob of data of a specified size in bytes for a given key into persistent storage.
 //! The maximum size is \ref PERSIST_DATA_MAX_LENGTH
 //! @param key The key of the field to write to.
-//! @param size The size in bytes.
 //! @param data The pointer to the blob of data.
+//! @param size The size in bytes.
 //! @return The number of bytes written.
-int persist_write_data(const uint32_t key, const size_t size, const void *data);
+int persist_write_data(const uint32_t key, const void *data, const size_t size);
 
 //! Writes a string a given key into persistent storage.
 //! The maximum size is \ref PERSIST_STRING_MAX_LENGTH including the null terminator.
@@ -1991,7 +2031,7 @@ typedef enum {
   GCornersBottom = GCornerBottomLeft | GCornerBottomRight,
   //! Left corners
   GCornersLeft = GCornerTopLeft | GCornerBottomLeft,
-  // Right corners
+  //! Right corners
   GCornersRight = GCornerTopRight | GCornerBottomRight,
 } GCornerMask;
 
@@ -2215,8 +2255,11 @@ void fonts_unload_custom_font(GFont font);
 //! @see graphics_draw_text
 //! @see text_layer_set_overflow_mode
 typedef enum {
+  //! On overflow, wrap words to a new line below the current one.
   GTextOverflowModeWordWrap,
+  //! On overflow, truncate as needed to fit a trailing ellipsis (...).
   GTextOverflowModeTrailingEllipsis,
+  //! Acts like GTextOverflowModeTrailingEllipsis but isn't limited to a single line. The text will wrap until the vertical space is consumed and then the final word will be truncated with a trailing ellipsis.
   GTextOverflowModeFill
 } GTextOverflowMode;
 
@@ -2592,7 +2635,7 @@ void window_set_click_config_provider(Window *window, ClickConfigProvider click_
 //! (instead of the window pointer) that will be passed into the ClickHandler click event handlers.
 //! @param window The window for which to set the click config provider
 //! @param click_config_provider The callback that will be called to configure the click recognizers with the window
-//! @param context Pointer to application specific data that will be passed into the ClickHandler click event handlers
+//! @param context Pointer to application specific data that will be passed to the click configuration provider callback.
 //! @see Clicks
 //! @see window_set_click_config_provider
 void window_set_click_config_provider_with_context(Window *window, ClickConfigProvider click_config_provider, void *context);

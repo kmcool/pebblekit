@@ -18,7 +18,7 @@ try:
 except Exception as e:
     logging.basicConfig(format='[%(levelname)-8s] %(message)s', 
                     level = logging.DEBUG)
-    PblAnalytics.missing_python_dependencyEvt(str(e))
+    PblAnalytics.missing_python_dependency_evt(str(e))
     raise
 
 class PbSDKShell:
@@ -37,6 +37,7 @@ class PbSDKShell:
         self.commands.append(PblListUuidCommand())
         self.commands.append(PblLogsCommand())
         self.commands.append(PblReplCommand())
+        self.commands.append(PblScreenshotCommand())
 
     def _get_version(self):
         try:
@@ -112,7 +113,10 @@ class PbSDKShell:
         
         except NoCompilerException as e:
             PblAnalytics.missing_tools_evt()
-            logging.error("The compiler/linker tools could not be found")
+            logging.error("The compiler/linker tools could not be found. "
+                          "Insure that the arm-cs-tools directory is present "
+                          "in the Pebble SDK directory (%s)" % 
+                          PblCommand().sdk_path(args))
             return 1
         
         except BuildErrorException as e:

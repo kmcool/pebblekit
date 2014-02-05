@@ -31,12 +31,15 @@ class LibPebbleCommand(PblCommand):
 
     def configure_subparser(self, parser):
         PblCommand.configure_subparser(self, parser)
-        parser.add_argument('--phone', type=str, default=os.getenv(PEBBLE_PHONE_ENVVAR), help='The IP address or hostname of your phone - Can also be provided through PEBBLE_PHONE environment variable.')
+        parser.add_argument('--phone', type=str, default=os.getenv(PEBBLE_PHONE_ENVVAR),
+                help='The IP address or hostname of your phone - Can also be provided through PEBBLE_PHONE environment variable.')
+        parser.add_argument('--verbose', type=bool, default=False, help='Prints received system logs in addition to APP_LOG')
 
     def run(self, args):
         if not args.phone:
             raise ConfigurationException("Argument --phone is required (Or set a PEBBLE_PHONE environment variable)")
         self.pebble = libpebble.Pebble()
+        self.pebble.set_print_pbl_logs(args.verbose)
         self.pebble.connect_via_websocket(args.phone)
 
     def tail(self, interactive=False, skip_enable_app_log=False):
@@ -184,6 +187,34 @@ class PblListUuidCommand(LibPebbleCommand):
                 continue
 
             print '%s - %s' % (description["name"], uuid)
+
+class PblScreenshotCommand(LibPebbleCommand):
+    name = 'screenshot'
+    help = 'take a screenshot of the pebble'
+
+    def run(self, args):
+        LibPebbleCommand.run(self, args)
+
+        logging.info("Taking screenshot...")
+        def progress_callback(amount):
+            logging.info("%.2f%% done..." % (amount*100.0))
+
+        image = self.pebble.screenshot(progress_callback)
+        name = time.strftime("pebble-screenshot_%Y-%m-%d_%H-%M-%S.png")
+        image.save(name, "PNG")
+        logging.info("Screenshot saved to %s" % name)
+
+        # Open up the image in the user's default image viewer. For some
+        # reason, this doesn't seem to open it up in their webbrowser,
+        # unlike how it might appear. See
+        # http://stackoverflow.com/questions/7715501/pil-image-show-doesnt-work-on-windows-7
+        try:
+            import webbrowser
+            webbrowser.open(name)
+        except:
+            logging.info("Note: Failed to open image, you'll have to open it "
+                         "manually if you want to see what it looks like ("
+                         "it has still been saved, however).")
 
 
 class PblLogsCommand(LibPebbleCommand):

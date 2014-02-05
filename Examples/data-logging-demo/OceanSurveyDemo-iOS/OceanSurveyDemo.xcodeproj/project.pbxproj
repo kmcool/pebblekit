@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0F872BA4182243AD0071E717 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F872BA3182243AD0071E717 /* CFNetwork.framework */; };
-		1032846617C4157A0071B49E /* appinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 1032846517C4157A0071B49E /* appinfo.json */; };
 		1072217017CEF0CA000C35FE /* PebbleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1072216E17CEF0CA000C35FE /* PebbleKit.framework */; };
 		1072217117CEF0CA000C35FE /* PebbleVendor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1072216F17CEF0CA000C35FE /* PebbleVendor.framework */; };
 		1072217617CEF78A000C35FE /* OSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1072217317CEF78A000C35FE /* OSAppDelegate.m */; };
@@ -30,7 +29,6 @@
 
 /* Begin PBXFileReference section */
 		0F872BA3182243AD0071E717 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		1032846517C4157A0071B49E /* appinfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = appinfo.json; sourceTree = "<group>"; };
 		1072216E17CEF0CA000C35FE /* PebbleKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleKit.framework; path = "../../../PebbleKit-iOS/PebbleKit.framework"; sourceTree = "<group>"; };
 		1072216F17CEF0CA000C35FE /* PebbleVendor.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleVendor.framework; path = "../../../PebbleKit-iOS/PebbleVendor.framework"; sourceTree = "<group>"; };
 		1072217217CEF78A000C35FE /* OSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSAppDelegate.h; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 		107BAF1C17BB246900B91FCD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1032846517C4157A0071B49E /* appinfo.json */,
 				107BAF1D17BB246900B91FCD /* OceanSurveyDemo-Info.plist */,
 				107BAF1E17BB246900B91FCD /* InfoPlist.strings */,
 				107BAF2117BB246900B91FCD /* main.m */,

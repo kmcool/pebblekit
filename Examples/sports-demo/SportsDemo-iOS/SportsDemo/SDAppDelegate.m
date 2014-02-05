@@ -36,7 +36,7 @@
   [watch appMessagesGetIsSupported:^(PBWatch *watch, BOOL isAppMessagesSupported) {
     if (isAppMessagesSupported) {
       // Configure our communications channel to target the sports app:
-      [watch appMessagesSetUUID:PBSportsUUID];
+      [[PBPebbleCentral defaultCentral] setAppUUID:PBSportsUUID];
       [_appViewController setTargetWatch:_targetWatch];
       [_dataViewController setTargetWatch:_targetWatch];
       [_iconViewController setTargetWatch:_targetWatch];

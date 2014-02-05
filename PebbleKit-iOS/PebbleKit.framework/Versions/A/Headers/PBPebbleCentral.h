@@ -44,6 +44,22 @@
 @property (nonatomic, readwrite, weak) id<PBPebbleCentralDelegate> delegate;
 
 /**
+ *  The UUID is used as the identifier of the watch/phone app pair and is used
+ *  to make sure that appMessage and dataLogging communications arrives at its companion app
+ *  on the other device (and not in another app).
+ *  @param uuid The 16 byte UUID of your app.
+ *  @note The UUID needs to be set before using either app message or data logging.
+ */
+@property (nonatomic, readwrite) NSData *appUUID;
+
+/**
+ *  Verifies the currently set application UUID.
+ *  @return YES if the currently set UUID is valid, NO if it is not.
+ *  @see -setAppUuid:
+ */
+- (BOOL)hasValidAppUUID;
+
+/**
  @returns YES if the Pebble iOS app is installed, NO if it is not installed.
  */
 - (BOOL)isMobileAppInstalled;

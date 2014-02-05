@@ -116,7 +116,7 @@
       // See demos/feature_app_messages/weather.c in the native watch app SDK for the same definition on the watch's end:
       uint8_t bytes[] = {0x28, 0xAF, 0x3D, 0xC7, 0xE4, 0x0D, 0x49, 0x0F, 0xBE, 0xF2, 0x29, 0x54, 0x8C, 0x8B, 0x06, 0x00};
       NSData *uuid = [NSData dataWithBytes:bytes length:sizeof(bytes)];
-      [watch appMessagesSetUUID:uuid];
+      [[PBPebbleCentral defaultCentral] setAppUUID:uuid];
 
       NSString *message = [NSString stringWithFormat:@"Yay! %@ supports AppMessages :D", [watch name]];
       [[[UIAlertView alloc] initWithTitle:@"Connected!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

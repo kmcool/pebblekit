@@ -21,6 +21,7 @@ import WebSocketPebble
 
 from collections import OrderedDict
 from struct import pack, unpack
+from PIL import Image
 
 DEFAULT_PEBBLE_ID = None #Triggers autodetection on unix-like systems
 DEFAULT_WEBSOCKET_PORT = 9000
@@ -60,6 +61,8 @@ class PebbleBundle(object):
 
         self.app_metadata_struct = struct.Struct(''.join(self.STRUCT_DEFINITION))
         self.app_metadata_length_bytes = self.app_metadata_struct.size
+
+        self.print_pbl_logs = False
 
     def get_manifest(self):
         if (self.manifest):
@@ -137,22 +140,76 @@ class PebbleBundle(object):
 
         return self.get_manifest()['resources']
 
+class ScreenshotSync():
+    timeout = 60
+    SCREENSHOT_OK = 0
+    SCREENSHOT_MALFORMED_COMMAND = 1
+    SCREENSHOT_OOM_ERROR = 2
+
+    def __init__(self, pebble, endpoint, progress_callback):
+        self.marker = threading.Event()
+        self.data = ''
+        self.have_read_header = False
+        self.length_received = 0
+        self.progress_callback = progress_callback
+        pebble.register_endpoint(endpoint, self.message_callback)
+
+    # Received a reply message from the watch. We expect several of these...
+    def message_callback(self, endpoint, data):
+        if not self.have_read_header:
+            data = self.read_header(data)
+            self.have_read_header = True
+
+        self.data += data
+        self.length_received += len(data) * 8 # in bits
+        self.progress_callback(float(self.length_received)/self.total_length)
+        if self.length_received >= self.total_length:
+            self.marker.set()
+
+    def read_header(self, data):
+        image_header = struct.Struct("!BIII")
+        header_len = image_header.size
+        header_data = data[:header_len]
+        data = data[header_len:]
+        response_code, version, self.width, self.height = \
+          image_header.unpack(header_data)
+
+        if response_code is not ScreenshotSync.SCREENSHOT_OK:
+            raise PebbleError(None, "Pebble responded with nonzero response "
+                "code %d, signaling an error on the watch side." %
+                response_code)
+
+        if version is not 1:
+            raise PebbleError(None, "Received unrecognized image format "
+                "version %d from watch. Maybe your libpebble is out of "
+                "sync with your firmware version?" % version)
+
+        self.total_length = self.width * self.height
+        return data
+
+    def get_data(self):
+        try:
+            self.marker.wait(timeout=self.timeout)
+            return Image.frombuffer('1', (self.width, self.height), \
+                self.data, "raw", "1;R", 0, 1)
+        except:
+            raise PebbleError(None, "Timed out... Is the Pebble phone app connected?")
 
 class EndpointSync():
     timeout = 10
 
     def __init__(self, pebble, endpoint):
-        pebble.register_endpoint(endpoint, self.callback)
         self.marker = threading.Event()
+        pebble.register_endpoint(endpoint, self.callback)
 
-    def callback(self, *args):
-        self.data = args
+    def callback(self, endpoint, response):
+        self.data = response
         self.marker.set()
 
     def get_data(self):
         try:
             self.marker.wait(timeout=self.timeout)
-            return self.data[1]
+            return self.data
         except:
             raise PebbleError(None, "Timed out... Is the Pebble phone app connected?")
 
@@ -189,7 +246,8 @@ class Pebble(object):
             "NOTIFICATION": 3000,
             "RESOURCE": 4000,
             "APP_MANAGER": 6000,
-            "PUTBYTES": 48879
+            "SCREENSHOT": 8000,
+            "PUTBYTES": 48879,
     }
 
     log_levels = {
@@ -241,7 +299,8 @@ class Pebble(object):
                 self.endpoints["LOGS"]: self._log_response,
                 self.endpoints["PING"]: self._ping_response,
                 self.endpoints["APP_LOGS"]: self._app_log_response,
-                self.endpoints["APP_MANAGER"]: self._appbank_status_response
+                self.endpoints["APP_MANAGER"]: self._appbank_status_response,
+                self.endpoints["SCREENSHOT"]: self._screenshot_response,
         }
 
     def init_reader(self):
@@ -300,7 +359,7 @@ class Pebble(object):
     def _reader(self):
         try:
             while self._alive:
-                source, endpoint, resp = self._recv_message() 
+                source, endpoint, resp = self._recv_message()
                 #reading message if socket is closed causes exceptions
 
                 if resp is None or source is None:
@@ -308,8 +367,11 @@ class Pebble(object):
                     continue
 
                 if source == 'ws':
-                    # phone -> sdk message
-                    self._ws_client.handle_response(endpoint, resp)
+                    if endpoint in ['status', 'phoneInfo']:
+                        # phone -> sdk message
+                        self._ws_client.handle_response(endpoint, resp)
+                    elif endpoint == 'log':
+                        log.info(resp)
                     continue
 
                 #log.info("message for endpoint " + str(endpoint) + " resp : " + str(resp))
@@ -397,6 +459,10 @@ class Pebble(object):
 
         parts = [artist[:30], album[:30], track[:30]]
         self._send_message("MUSIC_CONTROL", self._pack_message_data(16, parts))
+
+    def screenshot(self, progress_callback):
+        self._send_message("SCREENSHOT", "\x00")
+        return ScreenshotSync(self, "SCREENSHOT", progress_callback).get_data()
 
     def get_versions(self, async = False):
 
@@ -524,7 +590,8 @@ class Pebble(object):
         if self._ws_client._topic == 'phoneInfo':
           return self._ws_client._response
         else:
-          log.error("Unexpected response %s" % self._ws_client._topic)
+          log.error('get_phone_info: Unexpected response to "%s"' % self._ws_client._topic)
+          return 'Unknown'
 
     def install_app_pebble_protocol(self, pbw_path, launch_on_install=True):
 
@@ -806,9 +873,15 @@ class Pebble(object):
         self._alive = False
         self._ser.close()
 
+    def set_print_pbl_logs(self, value):
+        self.print_pbl_logs = value
+
     def _add_app(self, index):
         data = pack("!bI", 3, index)
         self._send_message("APP_MANAGER", data)
+
+    def _screenshot_response(self, endpoint, data):
+        return data
 
     def _ping_response(self, endpoint, data):
         restype, retcookie = unpack("!bL", data)
@@ -838,9 +911,60 @@ class Pebble(object):
             log.warn("Unable to decode log message (length %d is less than 8)" % len(data))
             return
 
-        timestamp, str_level, filename, linenumber, message = self._parse_log_response(data)
+        if self.print_pbl_logs:
+            timestamp, str_level, filename, linenumber, message = self._parse_log_response(data)
 
-        log.info("{} {} {} {} {}".format(timestamp, str_level, filename, linenumber, message))
+            log.info("{} {} {} {} {}".format(timestamp, str_level, filename, linenumber, message))
+
+    def _print_crash_message(self, crashed_uuid, crashed_pc, crashed_lr):
+        # Read the current projects UUID from it's appinfo.json. If we can't do this or the uuid doesn't match
+        # the uuid of the crashed app we don't print anything.
+        from PblProjectCreator import check_project_directory, PebbleProjectException
+        try:
+            check_project_directory()
+        except PebbleProjectException:
+            # We're not in the project directory
+            return
+
+        with open('appinfo.json', 'r') as f:
+            try:
+                app_info = json.load(f)
+                app_uuid = uuid.UUID(app_info['uuid'])
+            except ValueError as e:
+                log.warn("Could not look up debugging symbols.")
+                log.warn("Failed parsing appinfo.json")
+                log.warn(str(e))
+                return
+
+        if (app_uuid != crashed_uuid):
+            # Someone other than us crashed, just bail
+            return
+
+
+        if not os.path.exists(APP_ELF_PATH):
+            log.warn("Could not look up debugging symbols.")
+            log.warn("Could not find ELF file: %s" % APP_ELF_PATH)
+            log.warn("Please try rebuilding your project")
+            return
+
+
+        def print_register(register_name, addr_str):
+            if (addr_str[0] == '?') or (int(addr_str, 16) > 0x20000):
+                # We log '???' when the reigster isn't available
+
+                # The firmware translates app crash addresses to be relative to the start of the firmware
+                # image. We filter out addresses that are higher than 128k since we know those higher addresses
+                # are most likely from the firmware itself and not the app
+
+                result = '???'
+            else:
+                result = sh.arm_none_eabi_addr2line(addr_str, exe=APP_ELF_PATH).strip()
+
+            log.warn("%24s %10s %s", register_name + ':', addr_str, result)
+
+        print_register("Program Counter (PC)", crashed_pc)
+        print_register("Link Register (LR)", crashed_lr)
+
 
     def _app_log_response(self, endpoint, data):
         if (len(data) < 8):
@@ -852,17 +976,14 @@ class Pebble(object):
 
         log.info("{} {}:{} {}".format(str_level, filename, linenumber, message))
 
-        m = re.search('App fault! PC: (0x[0-9A-Fa-f]+) LR: (0x[0-9A-Fa-f]+)', message)
+        # See if the log message we printed matches the message we print when we crash. If so, try to provide
+        # some additional information by looking up the filename and linenumber for the symbol we crasehd at.
+        m = re.search('App fault! ({[0-9a-fA-F\-]+}) PC: (\S+) LR: (\S+)', message)
         if m:
-            pc = m.group(1)
-            lr = m.group(2)
-            log.warn('Your app crashed... :\'(')
+            crashed_uuid_str = m.group(1)
+            crashed_uuid = uuid.UUID(crashed_uuid_str)
 
-            if os.path.exists(APP_ELF_PATH):
-                log.info('Looking up the code line(s) that caused the crash:')
-                log.info(sh.arm_none_eabi_addr2line('--exe=' + APP_ELF_PATH, pc, lr))
-            else:
-                log.warn("Tried to look up where you app crashed, but cannot find '%s'." % APP_ELF_PATH)
+            self._print_crash_message(crashed_uuid, m.group(2), m.group(3))
 
     def _appbank_status_response(self, endpoint, data):
         def unpack_uuid(data):

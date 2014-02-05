@@ -103,7 +103,7 @@ public final class PebbleKit {
         if (c == null || !c.moveToNext()) {
             return false;
         }
-        return c.getInt(0) == 1;
+        return c.getInt(KIT_STATE_COLUMN_CONNECTED) == 1;
     }
 
     /**
@@ -126,12 +126,41 @@ public final class PebbleKit {
         if (c == null || !c.moveToNext()) {
             return false;
         }
-        return c.getInt(1) == 1;
+        return c.getInt(KIT_STATE_COLUMN_APPMSG_SUPPORT) == 1;
+    }
+
+    
+    /**
+     * Get the version information of the firmware running on a connected watch.
+     *
+     * @param context
+     *         The Android context used to perform the query.
+     *         <p/>
+     *         <em>Protip:</em> You probably want to use your ApplicationContext here.
+     *
+     * @return null if the watch is disconnected or we can't get the version. Otherwise,
+     *         a FirmwareVersionObject containing info on the watch FW version
+     */
+    public static FirmwareVersionInfo getWatchFWVersion(final Context context) {
+        Cursor c =
+                context.getContentResolver().query(
+                        Uri.parse("content://com.getpebble.android.provider/state"), null, null,
+                        null, null);
+        if (c == null || !c.moveToNext()) {
+            return null;
+        }
+        
+        int majorVersion = c.getInt(KIT_STATE_COLUMN_VERSION_MAJOR);
+        int minorVersion = c.getInt(KIT_STATE_COLUMN_VERSION_MINOR);
+        int pointVersion = c.getInt(KIT_STATE_COLUMN_VERSION_POINT);
+        String versionTag = c.getString(KIT_STATE_COLUMN_VERSION_TAG);
+        
+        return new FirmwareVersionInfo(majorVersion, minorVersion, pointVersion, versionTag);
     }
 
     /**
      * Synchronously query the Pebble application to see if the connected watch is running a firmware version that
-     * supports PebbleKit data spooling.
+     * supports PebbleKit data logging.
      *
      * @param context
      *         The Android context used to perform the query.
@@ -141,15 +170,15 @@ public final class PebbleKit {
      * @return true if the watch supports PebbleKit messages, otherwise false. This method will always return false if
      *         no Pebble is currently connected to the handset.
      */
-    public static boolean isDataSpoolingSuported(final Context context) {
+    public static boolean isDataLoggingSupported(final Context context) {
         Cursor c =
                 context.getContentResolver().query(
-                        Uri.parse("content://com.getpebble.android.dataspoolerprovider/state"),
+                        Uri.parse("content://com.getpebble.android.provider/state"),
                         null, null, null, null);
         if (c == null || !c.moveToNext()) {
             return false;
         }
-        return c.getInt(1) == 1;
+        return c.getInt(KIT_STATE_COLUMN_DATALOGGING_SUPPORT) == 1;
     }
 
     /**
@@ -802,5 +831,35 @@ public final class PebbleKit {
         final Intent requestIntent = new Intent(INTENT_DL_REQUEST_DATA);
         requestIntent.putExtra(APP_UUID, appUuid);
         context.sendBroadcast(requestIntent);
+    }
+    
+    public static class FirmwareVersionInfo {
+        private final int major;
+        private final int minor;
+        private final int point;
+        private final String tag;
+        
+        FirmwareVersionInfo(int major, int minor, int point, String tag) {
+            this.major = major;
+            this.minor = minor;
+            this.point = point;
+            this.tag = tag;
+        }
+        
+        public final int getMajor() {
+            return major;
+        }
+        
+        public final int getMinor() {
+            return minor;
+        }
+        
+        public final int getPoint() {
+            return point;
+        }
+        
+        public final String getTag() {
+            return tag;
+        }
     }
 }

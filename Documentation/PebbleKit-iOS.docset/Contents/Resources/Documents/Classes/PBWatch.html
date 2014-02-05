@@ -64,8 +64,6 @@
 	
 	<option value="//api/name/appMessagesGetIsSupported:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesGetIsSupported:</option>
 	
-	<option value="//api/name/appMessagesHasValidAppUUID">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesHasValidAppUUID</option>
-	
 	<option value="//api/name/appMessagesKill:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesKill:</option>
 	
 	<option value="//api/name/appMessagesLaunch:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesLaunch:</option>
@@ -73,10 +71,6 @@
 	<option value="//api/name/appMessagesPushUpdate:onSent:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesPushUpdate:onSent:</option>
 	
 	<option value="//api/name/appMessagesRemoveUpdateHandler:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesRemoveUpdateHandler:</option>
-	
-	<option value="//api/name/appMessagesSetUUID:">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesSetUUID:</option>
-	
-	<option value="//api/name/appMessagesUUID">&nbsp;&nbsp;&nbsp;&nbsp;- appMessagesUUID</option>
 	
 	<option value="//api/name/closeSession:">&nbsp;&nbsp;&nbsp;&nbsp;- closeSession:</option>
 	
@@ -136,13 +130,13 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Sports Methods">Sports Methods</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Ping Methods">Ping Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_AppMessages Methods">AppMessages Methods</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Golf Methods">Golf Methods</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_AppMessages Methods">AppMessages Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Ping Methods">Ping Methods</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Sports Methods">Sports Methods</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Version Methods">Version Methods</a></span></li>
 	
@@ -180,8 +174,6 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesGetIsSupported:">appMessagesGetIsSupported:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesHasValidAppUUID">appMessagesHasValidAppUUID</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesKill:">appMessagesKill:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesLaunch:">appMessagesLaunch:</a></span></li>
@@ -189,10 +181,6 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesPushUpdate:onSent:">appMessagesPushUpdate:onSent:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesRemoveUpdateHandler:">appMessagesRemoveUpdateHandler:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appMessagesUUID">appMessagesUUID</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/closeSession:">closeSession:</a></span></li>
 	
@@ -295,6 +283,8 @@ communicate when a Pebble is <a href="#//api/name/connected">connected</a>.</p>
 <p>When the user has stopped using your app (e.g. when going to the background
 or when explicitely stopping a certain activity in the app) your iOS app
 should close the communication session using the <a href="#//api/name/closeSession:">closeSession:</a> method.</p>
+
+<p>PollServiceType</p>
 					</div>
 					
 					
@@ -368,6 +358,114 @@ should close the communication session using the <a href="#//api/name/closeSessi
 						</ul>
 						
 						
+						<a title="AppMessages Methods" name="task_AppMessages Methods"></a>
+						<h3 class="subsubtitle task-title">AppMessages Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesGetIsSupported:">&ndash;&nbsp;appMessagesGetIsSupported:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesPushUpdate:onSent:">&ndash;&nbsp;appMessagesPushUpdate:onSent:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesAddReceiveUpdateHandler:">&ndash;&nbsp;appMessagesAddReceiveUpdateHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesRemoveUpdateHandler:">&ndash;&nbsp;appMessagesRemoveUpdateHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesLaunch:">&ndash;&nbsp;appMessagesLaunch:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appMessagesKill:">&ndash;&nbsp;appMessagesKill:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Golf Methods" name="task_Golf Methods"></a>
+						<h3 class="subsubtitle task-title">Golf Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfGetIsSupported:">&ndash;&nbsp;golfGetIsSupported:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfAppLaunch:">&ndash;&nbsp;golfAppLaunch:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfAppKill:">&ndash;&nbsp;golfAppKill:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfAppUpdate:onSent:">&ndash;&nbsp;golfAppUpdate:onSent:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfAppAddReceiveUpdateHandler:">&ndash;&nbsp;golfAppAddReceiveUpdateHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfAppRemoveUpdateHandler:">&ndash;&nbsp;golfAppRemoveUpdateHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/golfSetTitle:icon:onSent:">&ndash;&nbsp;golfSetTitle:icon:onSent:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Ping Methods" name="task_Ping Methods"></a>
+						<h3 class="subsubtitle task-title">Ping Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/pingWithCookie:onPong:onTimeout:">&ndash;&nbsp;pingWithCookie:onPong:onTimeout:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
 						<a title="Sports Methods" name="task_Sports Methods"></a>
 						<h3 class="subsubtitle task-title">Sports Methods</h3>
 
@@ -429,132 +527,6 @@ should close the communication session using the <a href="#//api/name/closeSessi
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/sportsSetTitle:icon:onSent:">&ndash;&nbsp;sportsSetTitle:icon:onSent:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Ping Methods" name="task_Ping Methods"></a>
-						<h3 class="subsubtitle task-title">Ping Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/pingWithCookie:onPong:onTimeout:">&ndash;&nbsp;pingWithCookie:onPong:onTimeout:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Golf Methods" name="task_Golf Methods"></a>
-						<h3 class="subsubtitle task-title">Golf Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfGetIsSupported:">&ndash;&nbsp;golfGetIsSupported:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfAppLaunch:">&ndash;&nbsp;golfAppLaunch:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfAppKill:">&ndash;&nbsp;golfAppKill:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfAppUpdate:onSent:">&ndash;&nbsp;golfAppUpdate:onSent:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfAppAddReceiveUpdateHandler:">&ndash;&nbsp;golfAppAddReceiveUpdateHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfAppRemoveUpdateHandler:">&ndash;&nbsp;golfAppRemoveUpdateHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/golfSetTitle:icon:onSent:">&ndash;&nbsp;golfSetTitle:icon:onSent:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="AppMessages Methods" name="task_AppMessages Methods"></a>
-						<h3 class="subsubtitle task-title">AppMessages Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesGetIsSupported:">&ndash;&nbsp;appMessagesGetIsSupported:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesSetUUID:">&ndash;&nbsp;appMessagesSetUUID:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesUUID">&ndash;&nbsp;appMessagesUUID</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesHasValidAppUUID">&ndash;&nbsp;appMessagesHasValidAppUUID</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesPushUpdate:onSent:">&ndash;&nbsp;appMessagesPushUpdate:onSent:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesAddReceiveUpdateHandler:">&ndash;&nbsp;appMessagesAddReceiveUpdateHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesRemoveUpdateHandler:">&ndash;&nbsp;appMessagesRemoveUpdateHandler:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesLaunch:">&ndash;&nbsp;appMessagesLaunch:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/appMessagesKill:">&ndash;&nbsp;appMessagesKill:</a></code>
 	</span>
 	
 	
@@ -1030,67 +1002,12 @@ asynchronously on the queue that was originally used when calling this method.</
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Queries the watch whether AppMessages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before <a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></p></div>
+		<p>Queries the watch whether AppMessages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before -appMessagesSetUUID:</p></div>
 	</div>
 	
 	
 	
 	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">PBWatch+AppMessages.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/appMessagesHasValidAppUUID" title="appMessagesHasValidAppUUID"></a>
-	<h3 class="subsubtitle method-title">appMessagesHasValidAppUUID</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Verifies the currently set application UUID.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (BOOL)appMessagesHasValidAppUUID</code></div>
-
-    
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>YES if the currently set UUID is valid, NO if it is not.</p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>Verifies the currently set application UUID.</p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/appMessagesSetUUID:">- appMessagesSetUUID:</a></p></code></li>
-			
-		</ul>
-	</div>
 	
 	
 	
@@ -1333,115 +1250,6 @@ create NSNumbers with specific types standard integer types.</p></dd>
 		<ul>
 			
 			<li><code><p><a href="#//api/name/appMessagesAddReceiveUpdateHandler:">- appMessagesAddReceiveUpdateHandler:</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">PBWatch+AppMessages.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/appMessagesSetUUID:" title="appMessagesSetUUID:"></a>
-	<h3 class="subsubtitle method-title">appMessagesSetUUID:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Configures the UUID of the application. The UUID is used as the identifier of the watch/phone app pair and is used
-to make sure that the message that an app sends, arrives at its companion app on the other device (and not in another app).</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)appMessagesSetUUID:(NSData *)<em>uuid</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>uuid</em></dt>
-			<dd><p>The 16 byte UUID of your app.</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>Configures the UUID of the application. The UUID is used as the identifier of the watch/phone app pair and is used
-to make sure that the message that an app sends, arrives at its companion app on the other device (and not in another app).</p><div class="note"><p><strong>Note:</strong> When -appMessagesSetUUID: is called, the UUID will be used for all incoming and outgoing messages thereafter.
-The UUID needs to be set before doing any other AppMessage operations (with one exeception, <a href="#//api/name/appMessagesGetIsSupported:">appMessagesGetIsSupported:</a> ).</p></div>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">PBWatch+AppMessages.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/appMessagesUUID" title="appMessagesUUID"></a>
-	<h3 class="subsubtitle method-title">appMessagesUUID</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Returns the current UUID of the application as set earlier using <a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (NSData *)appMessagesUUID</code></div>
-
-    
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The UUID of your app</p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>Returns the current UUID of the application as set earlier using <a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/appMessagesSetUUID:">- appMessagesSetUUID:</a></p></code></li>
 			
 		</ul>
 	</div>
@@ -1985,7 +1793,7 @@ asynchronously on the queue that was originally used when calling this method.</
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Queries the watch whether Golf Messages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before <a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></p></div>
+		<p>Queries the watch whether Golf Messages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before -appMessagesSetUUID:</p></div>
 	</div>
 	
 	
@@ -2685,7 +2493,7 @@ asynchronously on the queue that was originally used when calling this method.</
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Queries the watch whether Sports Messages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before <a href="#//api/name/appMessagesSetUUID:">appMessagesSetUUID:</a></p></div>
+		<p>Queries the watch whether Sports Messages are supported.</p><div class="note"><p><strong>Note:</strong> This API is the only AppMessages method that can (and should) be used before -appMessagesSetUUID:</p></div>
 	</div>
 	
 	
@@ -2789,7 +2597,7 @@ to avoid changing the title and icon while it is being displayed in the menu as 
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Pebble Technology Corp.. All rights reserved. (Last updated: 2013-11-07)</span><br />
+						<p><span class="copyright">&copy; 2013 Pebble Technology Corp.. All rights reserved. (Last updated: 2013-11-14)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

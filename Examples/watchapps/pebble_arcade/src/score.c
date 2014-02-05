@@ -125,7 +125,7 @@ void high_score_init(void) {
   // Read in stored high scores, or put in default values if non-existent.
   for (int i = 0; i < NUM_HIGH_SCORES; ++i) {
     if (persist_exists(2*i))
-      persist_read_string(2*i, 4, scores[i].name);
+      persist_read_string(2*i, scores[i].name, 4);
     else
       memcpy(scores[i].name, "AAA\0", 4);
 
